@@ -166,7 +166,7 @@ COPY --from=venv-builder $VENV_PATH $VENV_PATH
 # Grab CRF++ Model Release
 RUN python -m mealie.scripts.install_model
 
-VOLUME [ "$MEALIE_HOME/data/" ]
+RAILWAY VOLUME [ "$MEALIE_HOME/data/" ]
 ENV APP_PORT=9000
 
 EXPOSE ${APP_PORT}
