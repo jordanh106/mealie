@@ -54,9 +54,15 @@ ENV POETRY_HOME="/opt/poetry" \
 # prepend poetry to path
 ENV PATH="$POETRY_HOME/bin:$PATH"
 
-# install poetry - respects $POETRY_VERSION & $POETRY_HOME
-ENV POETRY_VERSION=2.0.1
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl build-essential libpq-dev python3-venv python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry manually
+ENV POETRY_VERSION=1.7.1
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    poetry --version
 
 # install poetry plugins needed to build the package
 RUN poetry self add "poetry-plugin-export>=1.9"
@@ -171,4 +177,4 @@ EXPOSE ${APP_PORT}
 COPY ./docker/entry.sh $MEALIE_HOME/run.sh
 
 RUN chmod +x $MEALIE_HOME/run.sh
-ENTRYPOINT ["/app/run.sh"]
+ENTRYPOINT CMD ["uvicorn", "mealie.app:app", "--host", "0.0.0.0", "--port", "9000"]
