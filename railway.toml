@@ -1,3 +1,4 @@
 [build]
-builder = "docker"
-dockerfilePath = "docker/Dockerfile"
+type = "docker"
+dockerfilePath = "./Dockerfile"
+context = "."
