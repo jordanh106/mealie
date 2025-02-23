@@ -61,8 +61,10 @@ RUN apt-get update && apt-get install -y \
 
 # Install Poetry manually
 ENV POETRY_VERSION=1.7.1
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    poetry --version
+# Fix Poetry installation
+RUN curl -sSL https://install.python-poetry.org | python3 - \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-dev --no-interaction --no-ansi
 
 # install poetry plugins needed to build the package
 RUN poetry self add "poetry-plugin-export>=1.9"
